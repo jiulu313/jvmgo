@@ -80,6 +80,7 @@ func getJreDir(jreOption string) string {
 	panic("Can not find jre folder")
 }
 
+//是否存在path
 func exists(path string) bool {
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {
