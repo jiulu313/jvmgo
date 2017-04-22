@@ -20,13 +20,13 @@ func newZipEntry(path string) *ZipEntry {
 	return &ZipEntry{absPath}
 }
 
-func (itself *ZipEntry) String() string {
-	return itself.absPath
+func (self *ZipEntry) String() string {
+	return self.absPath
 }
 
 //从zip文件中读取
-func (itself *ZipEntry) readClass(className string) ([]byte, Entry, error) {
-	r, err := zip.OpenReader(itself.absPath)
+func (self *ZipEntry) readClass(className string) ([]byte, Entry, error) {
+	r, err := zip.OpenReader(self.absPath)
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,7 @@ func (itself *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 				return nil, nil, err
 			}
 
-			return data, itself, nil
+			return data, self, nil
 		}
 	}
 

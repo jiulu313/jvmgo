@@ -19,8 +19,8 @@ func newCompositeEntry(pathList string) CompositeEntry {
 }
 
 //读取类文件
-func (itself CompositeEntry) readClass(className string) ([]byte, Entry, error) {
-	for _, entry := range itself {
+func (self CompositeEntry) readClass(className string) ([]byte, Entry, error) {
+	for _, entry := range self {
 		data, from, err := entry.readClass(className)
 		if err == nil {
 			return data, from, nil
@@ -31,9 +31,9 @@ func (itself CompositeEntry) readClass(className string) ([]byte, Entry, error) 
 }
 
 //把CompositeEntry中的每个entry中的String()返回的字符拼接起来即可
-func (itself CompositeEntry) String() string {
-	strs := make([]string, len(itself))
-	for i, entry := range itself {
+func (self CompositeEntry) String() string {
+	strs := make([]string, len(self))
+	for i, entry := range self {
 		strs[i] = entry.String()
 	}
 

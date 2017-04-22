@@ -21,42 +21,42 @@ func Parse(jreOption, cpOption string) *Classpath {
 }
 
 //parseBootAndExtClasspath
-func (itself *Classpath) parseBootAndExtClasspath(jreOption string) {
+func (self *Classpath) parseBootAndExtClasspath(jreOption string) {
 	jreDir := getJreDir(jreOption)
 
 	// jre/lib/*
 	jreLibPath := filepath.Join(jreDir, "lib", "*")
-	itself.bootClasspath = newWildcardEntry(jreLibPath)
+	self.bootClasspath = newWildcardEntry(jreLibPath)
 
 	// jre/lib/ext/*
 	jreExtPath := filepath.Join(jreDir, "lib", "ext", "*")
-	itself.extClasspath = newWildcardEntry(jreExtPath)
+	self.extClasspath = newWildcardEntry(jreExtPath)
 }
 
 //解析用户自定义的,如果用户没有提供-cp,则使用当前目录作为用户类路径
-func (itself *Classpath) parseUserClasspath(cpOption string) {
+func (self *Classpath) parseUserClasspath(cpOption string) {
 	if cpOption == "" {
 		cpOption = "."
 	}
-	itself.userClasspath = newEntry(cpOption)
+	self.userClasspath = newEntry(cpOption)
 }
 
 //ReadClass 注意 className 不能包含 .class
-func (itself *Classpath) ReadClass(className string) ([]byte, Entry, error) {
+func (self *Classpath) ReadClass(className string) ([]byte, Entry, error) {
 	className = className + ".class"
 
-	if data, entry, err := itself.bootClasspath.readClass(className); err == nil {
+	if data, entry, err := self.bootClasspath.readClass(className); err == nil {
 		return data, entry, err
 	}
-	if data, entry, err := itself.extClasspath.readClass(className); err == nil {
+	if data, entry, err := self.extClasspath.readClass(className); err == nil {
 		return data, entry, err
 	}
-	return itself.userClasspath.readClass(className)
+	return self.userClasspath.readClass(className)
 }
 
 //String 返回用户类路径
-func (itself *Classpath) String() string {
-	return itself.userClasspath.String()
+func (self *Classpath) String() string {
+	return self.userClasspath.String()
 }
 
 /*
