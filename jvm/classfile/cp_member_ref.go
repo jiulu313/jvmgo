@@ -31,7 +31,7 @@ type ConstantMethodrefInfo struct {
 }
 
 type ConstantInterfaceMethodrefInfo struct {
-
+	ConstantMemberrefInfo
 }
 
 
