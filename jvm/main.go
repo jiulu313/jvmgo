@@ -13,7 +13,6 @@ func main() {
 	} else {
 		startJVM(cmd)
 	}
-
 }
 
 func startJVM(cmd *Cmd) {

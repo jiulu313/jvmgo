@@ -14,6 +14,13 @@ type Entry interface {
 	String() string
 }
 
+/**
+	生成4种 Entry
+	1 目录分隔符的
+	2 通配符的
+	3 zip,jar包的
+	4 目录的
+ */
 func newEntry(path string) Entry {
 	//生成路径组合的Entry
 	if strings.Contains(path, pathListSeparator) {
