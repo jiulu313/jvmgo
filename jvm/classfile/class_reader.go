@@ -36,7 +36,7 @@ func (self *ClassReader) readUint64() uint64 {
 	return val
 }
 
-//读取uint16表
+//读取uint16表(就是读取uint16 数组)
 func (self *ClassReader) readUint16s() []uint16 {
 	n := self.readUint16()
 	s := make([]uint16, n)
