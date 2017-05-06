@@ -5,7 +5,7 @@ import "encoding/binary"
 
 //ClassReader 读取class文件
 type ClassReader struct {
-	data []byte;
+	data []byte
 }
 
 //读取 1 个字节

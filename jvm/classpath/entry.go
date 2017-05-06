@@ -8,7 +8,7 @@ import (
 //目录分隔符
 const pathListSeparator = string(os.PathListSeparator)
 
-//Entry struct,表示类路径
+//Entry ,表示类路径
 type Entry interface {
 	readClass(classname string) ([]byte, Entry, error)
 	String() string
