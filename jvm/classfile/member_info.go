@@ -22,11 +22,11 @@ func readMembers(reader *ClassReader,cp ConstantPool) []*MemberInfo {
 
 //读取单个属性
 func readMember(reader *ClassReader,cp ConstantPool) *MemberInfo {
-	return &MemberInfo{
+	return &MemberInfo {
 		cp:	cp,
 		accessFlags:reader.readUint16(),
 		nameIndex:reader.readUint16(),
-		attributes:readAttribuates(),
+		attributes:readAttributes(reader,cp),
 	}
 }
 

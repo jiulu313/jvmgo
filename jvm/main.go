@@ -44,6 +44,15 @@ func loadClass(className string,cp *classpath.Classpath) *classfile.ClassFile  {
 
 //打印一些重要的class文件的信息
 func printClassInfo(cf *classfile.ClassFile) {
-	fmt.Printf("version: %v\n",cf.MajorVersion(),cf.MinorVersion())
+	fmt.Printf("version:%v.%v\n",cf.MajorVersion(),cf.MinorVersion())
 	fmt.Printf("constants count: %v\n",len(cf.ConstantPool()))
+	fmt.Printf("access flags: 0x%x\n",cf.AccessFlag())
+	fmt.Printf("this class: %v\n",cf.ClassName())
+	fmt.Printf("super class: %v\n",cf.SuperClassName())
+	fmt.Printf("interfaces: %v\n",cf.InterfaceNames())
+	fmt.Printf("fields count: %v\n",len(cf.Fields()))
+	
+	for _,m := range cf.Methods() {
+		fmt.Printf("  %s\n",m.Name)
+	}
 }

@@ -6,38 +6,43 @@ import (
 
 //ClassFile  class文件的数据结构
 type ClassFile struct {
-	magic 			uint32
-	minorVersion	uint16
-	majorVersion	uint16
-	constantPool	ConstantPool
-	accessFlag		uint16
-	thisClass		uint16
-	superClass		uint16
-	interfaces		[]uint16
-	//fields			[]*MemberInfo
-	//methods			[]*MemberInfo
-	//attributes		[]AttributeInfo
+	magic        uint32
+	minorVersion uint16
+	majorVersion uint16
+	constantPool ConstantPool
+	accessFlag   uint16
+	thisClass    uint16
+	superClass   uint16
+	interfaces   []uint16
+	fields       []*MemberInfo
+	methods      []*MemberInfo
+	attributes   []AttributeInfo
 }
 
 //把[]byte解析成ClassFile结构体
-func Parse(classData []byte) (cf *ClassFile,err error)  {
+func Parse(classData []byte) (cf *ClassFile, err error) {
 	defer func() {
-		if r := recover(); r != nil{
+		if r := recover(); r != nil {
 			var ok bool
-			err,ok = r.(error)
+			err, ok = r.(error)
 			if !ok {
-				err = fmt.Errorf("%v",r)
+				err = fmt.Errorf("%v", r)
 			}
 		}
 	}()
 	
+	//构造一个ClassReader对象
 	classReader := &ClassReader{classData}
+	
+	//构造一个ClassFile对象
 	cf = &ClassFile{}
+	
+	//用classReader对象读取class文件，并返回ClassFile的结构体的对象
 	cf.read(classReader)
 	return
 }
 
-func (self *ClassFile)read(reader *ClassReader)  {
+func (self *ClassFile) read(reader *ClassReader) {
 	self.readAndCheckMagic(reader)
 	self.readAndCheckVersion(reader)
 	self.constantPool = readConstantPool(reader)
@@ -45,9 +50,9 @@ func (self *ClassFile)read(reader *ClassReader)  {
 	self.thisClass = reader.readUint16()
 	self.superClass = reader.readUint16()
 	self.interfaces = reader.readUint16s()
-	self.fields = readMembers(reader,self.constantPool)
-	self.methods = readMembers(reader,self.constantPool)
-	self.attributes = readAttributes(reader,self.constantPool)
+	self.fields = readMembers(reader, self.constantPool)
+	self.methods = readMembers(reader, self.constantPool)
+	self.attributes = readAttributes(reader, self.constantPool)
 }
 
 /*
@@ -76,52 +81,48 @@ func (self *ClassFile) readAndCheckMagic(reader *ClassReader) {
  *	J2SE 7	 	51.0
  *	J2SE 8	 	52
  */
-func (self *ClassFile)readAndCheckVersion(reader *ClassReader) {
+func (self *ClassFile) readAndCheckVersion(reader *ClassReader) {
 	self.minorVersion = reader.readUint16()
 	self.majorVersion = reader.readUint16()
 	
 	switch self.majorVersion {
 	case 45:
 		return
-	case 46,47,48,49,50,51,52:
+	case 46, 47, 48, 49, 50, 51, 52:
 		return
 	}
 	panic("java.lang.UnsupportedClassVersionError!")
 }
 
 //返回次版本号
-func (self *ClassFile)MinorVersion() uint16 {
+func (self *ClassFile) MinorVersion() uint16 {
 	return self.minorVersion
 }
 
 //返回主版本号
-func (self *ClassFile)MajorVersion() uint16 {
+func (self *ClassFile) MajorVersion() uint16 {
 	return self.majorVersion
 }
 
-func (self *ClassFile)AccessFlag() uint16 {
-	
-	
-	
-	
+func (self *ClassFile) AccessFlag() uint16 {
 	return self.accessFlag
 }
 
-func (self *ClassFile)ThisClass() uint16{
+func (self *ClassFile) ThisClass() uint16 {
 	return self.thisClass
 }
 
-func (self *ClassFile)SuperClass() uint16  {
+func (self *ClassFile) SuperClass() uint16 {
 	return self.superClass
 }
 
 //获取本类类名
-func (self *ClassFile)ClassName() string  {
+func (self *ClassFile) ClassName() string {
 	return self.constantPool.getClassName(self.thisClass)
 }
 
 //获取超类类名
-func (self *ClassFile)SuperClassName() string  {
+func (self *ClassFile) SuperClassName() string {
 	if self.superClass > 0 {
 		return self.constantPool.getClassName(self.superClass)
 	}
@@ -129,23 +130,25 @@ func (self *ClassFile)SuperClassName() string  {
 }
 
 //从常量池中查找接口名
-func (self *ClassFile)InterfaceNames() []string{
-	interfaceNames := make([]string,len(self.interfaces))
-	for i,cpIndex := range self.interfaces{
+func (self *ClassFile) InterfaceNames() []string {
+	interfaceNames := make([]string, len(self.interfaces))
+	for i, cpIndex := range self.interfaces {
 		interfaceNames[i] = self.constantPool.getClassName(cpIndex)
 	}
 	return interfaceNames
 }
 
+//返回常量池
+func (self *ClassFile) ConstantPool() ConstantPool {
+	return self.constantPool
+}
 
+//返回属性
+func (self *ClassFile) Fields() []*MemberInfo {
+	return self.fields
+}
 
-
-
-
-
-
-
-
-
-
-
+//返回方法
+func (self *ClassFile) Methods() []*MemberInfo {
+	return self.methods;
+}

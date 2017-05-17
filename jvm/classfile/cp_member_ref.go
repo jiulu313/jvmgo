@@ -1,39 +1,26 @@
 package classfile
 
+type ConstantFieldrefInfo struct{ ConstantMemberrefInfo }
+type ConstantMethodrefInfo struct{ ConstantMemberrefInfo }
+type ConstantInterfaceMethodrefInfo struct{ ConstantMemberrefInfo }
+
 type ConstantMemberrefInfo struct {
-	cp					ConstantPool
-	classIndex			uint16
-	nameAndTypeIndex 	uint16
+	cp               ConstantPool
+	classIndex       uint16
+	nameAndTypeIndex uint16
 }
 
-func (self *ConstantMemberrefInfo) readInfo(reader *ClassReader)  {
+func (self *ConstantMemberrefInfo) readInfo(reader *ClassReader) {
 	self.classIndex = reader.readUint16()
 	self.nameAndTypeIndex = reader.readUint16()
 }
 
 func (self *ConstantMemberrefInfo) ClassName() string {
-		return self.cp.getUtf8(self.classIndex)
+	return self.cp.getClassName(self.classIndex)
 }
-
-func (self *ConstantMemberrefInfo) NameAndDescriptor()string  {
-	return self.cp.getUtf8(self.nameAndTypeIndex)
+func (self *ConstantMemberrefInfo) NameAndDescriptor() (string, string) {
+	return self.cp.getNameAndType(self.nameAndTypeIndex)
 }
-
-/**
-	以下是定义了3个结构体，继承自ConstantMemberrefInfo
- */
-type ConstantFieldrefInfo struct {
-	ConstantMemberrefInfo
-}
-
-type ConstantMethodrefInfo struct {
-	ConstantMemberrefInfo
-}
-
-type ConstantInterfaceMethodrefInfo struct {
-	ConstantMemberrefInfo
-}
-
 
 
 
