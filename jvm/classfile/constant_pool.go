@@ -45,7 +45,7 @@ func (self ConstantPool) getClassName(index uint16) string  {
 //从常量池中查找UTF-8字符串
 func (self ConstantPool) getUtf8(index uint16) string  {
 	utf8Info := self.getConstantInfo(index).(*ConstantUtf8Info)
-	return utf8Info
+	return utf8Info.str
 }
 
 
