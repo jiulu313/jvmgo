@@ -30,7 +30,7 @@ func (self *Stack) push(frame *Frame) {
 }
 
 //弹栈
-func (self *Stack) pop() {
+func (self *Stack) pop() *Frame{
 	if self._top == nil {
 		panic("jvm stack is empty")
 	}

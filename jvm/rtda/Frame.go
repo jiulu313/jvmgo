@@ -16,7 +16,7 @@ type Frame struct {
 func NewFrame(maxLocals uint,maxStack uint) *Frame{
 	return &Frame{
 		localVars: newLocalVars(maxLocals),
-		operandStack:newOperandStack(maxStack)
+		operandStack:newOperandStack(maxStack),
 	}
 }
 
